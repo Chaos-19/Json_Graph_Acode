@@ -25,9 +25,6 @@ jobs:
       - name: Build the project
         run: npm run build-release  # Replace this with the command that builds your plugin
 
-      - name: Zip the build output as dist.zip
-        run: zip -r dist.zip ./dist  # Replace ./dist with the folder that contains the final build output
-
       - name: Create GitHub Release
         id: create_release
         uses: actions/create-release@v1
