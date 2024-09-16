@@ -1,7 +1,9 @@
 import plugin from "../plugin.json";
 import React from "react";
-import ReactDOM from "react-dom/client"; // import createRoot from ReactDOM
-import ErrorBoundary from "./ErrorBoundary"; // Import the error boundary
+import ReactDOM from "react-dom/client";
+import "./index.css"; // Import TailwindCSS
+import PageContextProvider from "./PageContext";
+import ErrorBoundary from "./components/ErrorBoundary";
 import App from "./App";
 
 class AcodePlugin {
@@ -15,7 +17,7 @@ class AcodePlugin {
         const root = ReactDOM.createRoot(rootDiv);
         root.render(
             <ErrorBoundary>
-                <App cacheFile={cacheFile} cacheFileUrl={cacheFileUrl} />{" "}
+                <App $page={$page} />
             </ErrorBoundary>
         );
 
@@ -38,11 +40,13 @@ class AcodePlugin {
     }
 
     async destroy() {
-        // Unmount the React app when the plugin is destroyed
         const rootDiv = document.getElementById("react-root");
         if (rootDiv) {
             ReactDOM.createRoot(rootDiv).unmount(); // Use createRoot for unmounting
         }
+        const header = root.get("header");
+        let icon = header.get(".icon.json-icon");
+        if (icon) icon.remove();
     }
 }
 

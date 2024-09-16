@@ -1,44 +1,114 @@
-import React, { useState, useRef } from "react";
-import { JsonCrack as Graph } from "jsongraph-react";
+import React, { useState, useEffect, useRef } from "react";
+import PageContextProvider, { PageContext } from "./PageContext";
 
-const App = ({ cacheFile, cacheFileUrl }) => {
-    const [count, setCount] = useState(0);
-    const graphRef = useRef();
+import Jsoncrack from "./components/Jsoncrack";
+import { fileExtensions, jsonIcon } from "./constants";
+import DropDown from "./components/Dropdown";
 
-    const json = JSON.stringify({
-        id: "1",
-        name: "aykut"
+const App = ({ $page }) => {
+    const [pageState, setPageState] = useState({
+        theme: "light",
+        direction: "DOWN",
+        collapseNodes: true,
+        compactNodes: false,
+        hideCollapseButton: false,
+        hideChildrenCount: false,
+        disableImagePreview: false
     });
 
+    const [activeFile, setActiveFile] = useState({});
+    const graphRef = useRef();
+
+    const toggleViewBtn = tag("span", {
+        className: "icon json-icon",
+        action: "toggle-json-graph",
+        attr: {
+            action: "toggle-json-graph"
+        },
+        onclick: () => $page.show(),
+        oncontextmenu() {
+            alert("oncontextmenu");
+        }
+    });
+
+    const toggleBtnToView = {
+        show: () => (toggleViewBtn.style.display = "block"),
+        hide: () => (toggleViewBtn.style.display = "none")
+    };
+
+    toggleViewBtn.innerHTML = jsonIcon;
+    toggleViewBtn.style = `
+    width:17px;
+    height:17px;
+    display:none;
+    font-size:18px;
+    `;
+
+    useEffect(() => {
+        // Access the header element
+        const header = root.get("header");
+
+        // Append your custom toggle view button
+        header.insertBefore(
+            toggleViewBtn,
+            header.querySelector(".text.sub-text").nextSibling
+        );
+
+        // Render DropDown component
+        const dropDownElement = DropDown({
+            $page,
+            pageState,
+            handlePageState,
+            graphRef
+        });
+        $page.header.append(dropDownElement);
+
+        // Cleanup function
+        return () => {
+            // Remove the dropdown element
+            $page.header.removeChild(dropDownElement);
+        };
+    }, []);
+
+    const handlePageState = newPageState => {
+        setPageState({
+            ...newPageState
+        });
+    };
+
+    useEffect(() => {
+        const handleSwitchFile = () => {
+            const { filename, uri } = editorManager.activeFile;
+
+            if (fileExtensions.includes(filename?.split(".").pop())) {
+                setActiveFile({
+                    filename,
+                    uri
+                });
+                toggleBtnToView.show();
+            } else {
+                toggleBtnToView.hide();
+            }
+        };
+
+        handleSwitchFile();
+
+        editorManager.on("switch-file", handleSwitchFile);
+
+        return () => {
+            editorManager.off("switch-file", handleSwitchFile);
+        };
+    }, []);
+
     return (
-        <div>
-            <h1>Hello from React inside Acode Plugin!</h1>
-            <p>{count}</p>
-            <div
-                style={{
-                    margin: "10px",
-                    padding: "20px",
-                    border: "2px solid red",
-                    borderRadius: "5px",
-                    width: "100%",
-                    width: "280px"
-                }}
-            >
-                >
-                <Graph json={json} ref={graphRef} />
-            </div>
-            <button
-                onClick={() => setCount(count + 1)}
-                style={{
-                    margin: "10px",
-                    padding: "20px",
-                    border: "2px solid red",
-                    borderRadius: "5px"
-                }}
-            >
-                Click
-            </button>
-        </div>
+        activeFile.filename && (
+            <Jsoncrack
+                graphRef={graphRef}
+                options={pageState}
+                fileName={activeFile.filename}
+                uri={activeFile.uri}
+            />
+        )
     );
 };
 

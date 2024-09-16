@@ -1,16 +1,16 @@
 {
-  "id": "acode.plugin",
-  "name": "Plugin",
-  "main": "dist/main.js",
-  "version": "1.0.0",
-  "readme": "readme.md",
-  "icon": "icon.png",
-  "files": [],
-  "minVersionCode" : 290,
-  "price": 0,
-  "author": {
-    "name": "",
-    "email": "",
-    "github": ""
-  }
+    "id": "acode.jsongraph.acode",
+    "name": "Json Graph view",
+    "main": "dist/main.js",
+    "version": "1.0.1",
+    "readme": "readme.md",
+    "icon": "icon.png",
+    "files": [],
+    "minVersionCode": 290,
+    "price": 0,
+    "author": {
+        "name": "kalkidan Getachew",
+        "email": "kalgetachew375@gmail.com",
+        "github": ""
+    }
 }

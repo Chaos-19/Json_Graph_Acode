@@ -4,6 +4,7 @@ const path = require("path");
 module.exports = (env, options) => {
     const { mode = "development" } = options;
     const rules = [
+        { test: /\.worker\.js$/, use: { loader: "worker-loader" } },
         {
             test: /\.m?js(x)?$/, // Handle both .js and .jsx files
             exclude: /node_modules/, // Exclude node_modules to avoid transpiling dependencies
@@ -15,6 +16,14 @@ module.exports = (env, options) => {
                         presets: ["@babel/preset-env", "@babel/preset-react"] // Ensure React preset is used
                     }
                 }
+            ]
+        },
+        {
+            test: /\.css$/,
+            use: [
+                "style-loader", // injects CSS into the DOM
+                "css-loader", // resolves @import and url() in CSS
+                "postcss-loader" // processes the CSS with PostCSS (Tailwind)
             ]
         }
     ];
