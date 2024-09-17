@@ -1,4 +1,4 @@
-const DropDown = ({ $page, pageState, handlePageState, graphRef }) => {
+const DropDown = ({ $page, pageState, handlePageState }) => {
     const toggleMenu = false;
 
     const dropdownMenu = tag("span", {
@@ -34,20 +34,11 @@ const DropDown = ({ $page, pageState, handlePageState, graphRef }) => {
             <li data-theme="light">
               <span class="dropdown-item theme">theme</span>
             </li>
-            <li data-value="false" data-collapseNodes="false">
-              <span class="dropdown-item collapseNodes">collapseNodes</span>
-            </li>
-            <li data-value="false" data-compactNodes="false">
-              <span class="dropdown-item compactNodes">compactNodes</span>
-            </li>
             <li data-value="false" data-hideChildrenCount="false">
               <span class="dropdown-item hideChildrenCount">hideChildrenCount</span>
             </li>
             <li data-value="false" data-hideCollapseButton="false">
               <span class="dropdown-item hideCollapseButton">hideCollapseButton</span>
-            </li>
-            <li data-value="false" data-disableImagePreview="false">
-              <span class="dropdown-item">disableImagePreview</span>
             </li>
           </ul>
     `;
@@ -98,21 +89,13 @@ const DropDown = ({ $page, pageState, handlePageState, graphRef }) => {
 
     const keys = [
         // "collapseNodes",
-        "compactNodes",
+        //"compactNodes",
         "hideChildrenCount",
-        "hideCollapseButton",
-        "disableImagePreview"
+        "hideCollapseButton"
+        //"disableImagePreview"
     ];
-    list[2].addEventListener("click", e => {
-        const collapseNodes = list[1].dataset.value;
-        e.target.textContent = collapsGraph ? "collapseNodes" : "expandNodes";
-        list[1].dataset.value = !collapseNodes;
-        console.log(JSON.stringify(graphRef.current));
-        if (!collapseNodes) graphRef.current?.collapsGraph();
-        else graphRef.current.expandGraph();
-    });
 
-    for (let i = 3; i < list.length; i++)
+    for (let i = 2; i < list.length; i++)
         list[i].addEventListener("click", e => {
             e.preventDefault();
             //console.log(list[i].dataset.value, i);

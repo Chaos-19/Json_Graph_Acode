@@ -1,5 +1,6 @@
 {
-    "name": "@chaos-19/json-graph-acode", "version": "1.0.1",
+    "name": "@chaos-19/json-graph-acode",
+    "version": "1.0.1",
     "description": "A JSON to Graph Visualizer plugin for Acode, built with React. This plugin enables users to visualize JSON data as an interactive graph for easy exploration of complex structures.",
     "main": "dist/main.js",
     "author": "kalkidan Getachew",

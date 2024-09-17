@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useRef } from "react";
-import PageContextProvider, { PageContext } from "./PageContext";
 
 import Jsoncrack from "./components/Jsoncrack";
 import { fileExtensions, jsonIcon } from "./constants";
 import DropDown from "./components/Dropdown";
+
+const fs = acode.require("fsOperation");
 
 const App = ({ $page }) => {
     const [pageState, setPageState] = useState({
@@ -77,10 +78,14 @@ const App = ({ $page }) => {
     };
 
     useEffect(() => {
-        const handleSwitchFile = () => {
+        const handleSwitchFile = async () => {
             const { filename, uri } = editorManager.activeFile;
-
-            if (fileExtensions.includes(filename?.split(".").pop())) {
+            
+            const isFileExist = await fs(uri).exists();
+            if (
+                isFileExist &&
+                fileExtensions.includes(filename?.split(".").pop())
+            ) {
                 setActiveFile({
                     filename,
                     uri
